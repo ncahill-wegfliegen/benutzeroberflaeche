@@ -23,6 +23,7 @@
 #include "ABOilPressTestDoc.h"
 #include "well_list_changed_event_args.h"
 #include "../../dev/gemeinsam/uwi/dls.h"
+#include "../../dev/datenzugriff/ab_oil_pressure_test/ab_oil_pressure_test/facade.h"
 
 #include <propkey.h>
 
@@ -35,41 +36,87 @@ using namespace std;
 IMPLEMENT_DYNCREATE(CABOilPressTestDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CABOilPressTestDoc, CDocument)
-	ON_COMMAND( ID_WELL_LIST_OPEN, &CABOilPressTestDoc::OnWellListOpen )
-	ON_UPDATE_COMMAND_UI( ID_WELL_LIST_OPEN, &CABOilPressTestDoc::OnUpdateWellListOpen )
+   ON_COMMAND( ID_WELL_LIST_OPEN, &CABOilPressTestDoc::OnWellListOpen )
+   ON_UPDATE_COMMAND_UI( ID_WELL_LIST_OPEN, &CABOilPressTestDoc::OnUpdateWellListOpen )
 END_MESSAGE_MAP()
 
 
 // CABOilPressTestDoc construction/destruction
 
 CABOilPressTestDoc::CABOilPressTestDoc() noexcept
-	: m_uwiList{make_unique<nhill::uwi::List>()}
-	, m_curUwi{ nullptr }
+   : facade_{ make_unique<Facade>()}
+   , uwis_{make_unique<nhill::uwi::List>()}
+   , uwi_current_{ nullptr }
+   , tests_{ make_unique<Test_container>()}
+   , test_current_{nullptr}
 {
 }
 
 CABOilPressTestDoc::~CABOilPressTestDoc()
 {
+
 }
 
 void CABOilPressTestDoc::on_well_changed( const nhill::Well_changed_event_args& event_args )
 {
-	const nhill::Uwi& uwi{ event_args.uwi };
-	m_curUwi = make_unique<nhill::uwi::Dls>( nhill::uwi::dls::parse_sort( uwi.value() ) );
+   // Remove all of the current tests
+   tests_->clear();
 
-	// Get the test(s) for this uwi;
+   // The currently selected UWI
+   const nhill::Uwi* uwi{ event_args.uwi };
+   if( uwi == nullptr )
+   {
+      // No well selected
+      uwi_current_ = nullptr;
+   }
+   else
+   {
+      // Convert to DLS format
+      Dls dls{ nhill::uwi::dls::parse_sort( uwi->value() ) };
+      // If the new uwi is the same as the current uwi, then don't do anything
+      if( uwi_current_ != nullptr && *uwi_current_ == dls )
+      {
+         return;
+      }
+      // Change to the new uwi
+      if( uwi_current_ == nullptr )
+      {
+         // Create and copy the new uwi
+         uwi_current_ = make_unique<Dls>( dls );
+      }
+      else
+      {
+         // Copy the new uwi
+         *uwi_current_ = dls;
+      }
+      // Get the test(s) for this uwi;
+      *tests_ = facade_->find_test_by_uwi( *uwi_current_ );
+   }
 
+   // Set the currently selected test
+   if( tests_->size() == 0 )
+   {
+      // No test selected
+      test_current_ = nullptr;
+   }
+   else
+   {
+      test_current_ = &(tests_->front());
+   }
+
+   // Tell everyone that a new test has been selected.
+	notify_test_changed( test_current_ );
 }
 
 BOOL CABOilPressTestDoc::OnNewDocument()
 {
-	if (!CDocument::OnNewDocument())
-		return FALSE;
+   if (!CDocument::OnNewDocument())
+      return FALSE;
 
-	// TODO: add reinitialization code here
-	// (SDI documents will reuse this document)
+   // TODO: add reinitialization code here
+   // (SDI documents will reuse this document)
 
-	return TRUE;
+   return TRUE;
 }
 
 
@@ -79,14 +126,14 @@ BOOL CABOilPressTestDoc::OnNewDocument()
 
 void CABOilPressTestDoc::Serialize(CArchive& ar)
 {
-	if (ar.IsStoring())
-	{
-		// TODO: add storing code here
-	}
-	else
-	{
-		// TODO: add loading code here
-	}
+   if (ar.IsStoring())
+   {
+      // TODO: add storing code here
+   }
+   else
+   {
+      // TODO: add loading code here
+   }
 }
 
 #ifdef SHARED_HANDLERS
@@ -94,51 +141,51 @@ void CABOilPressTestDoc::Serialize(CArchive& ar)
 // Support for thumbnails
 void CABOilPressTestDoc::OnDrawThumbnail(CDC& dc, LPRECT lprcBounds)
 {
-	// Modify this code to draw the document's data
-	dc.FillSolidRect(lprcBounds, RGB(255, 255, 255));
+   // Modify this code to draw the document's data
+   dc.FillSolidRect(lprcBounds, RGB(255, 255, 255));
 
-	CString strText = _T("TODO: implement thumbnail drawing here");
-	LOGFONT lf;
+   CString strText = _T("TODO: implement thumbnail drawing here");
+   LOGFONT lf;
 
-	CFont* pDefaultGUIFont = CFont::FromHandle((HFONT) GetStockObject(DEFAULT_GUI_FONT));
-	pDefaultGUIFont->GetLogFont(&lf);
-	lf.lfHeight = 36;
+   CFont* pDefaultGUIFont = CFont::FromHandle((HFONT) GetStockObject(DEFAULT_GUI_FONT));
+   pDefaultGUIFont->GetLogFont(&lf);
+   lf.lfHeight = 36;
 
-	CFont fontDraw;
-	fontDraw.CreateFontIndirect(&lf);
+   CFont fontDraw;
+   fontDraw.CreateFontIndirect(&lf);
 
-	CFont* pOldFont = dc.SelectObject(&fontDraw);
-	dc.DrawText(strText, lprcBounds, DT_CENTER | DT_WORDBREAK);
-	dc.SelectObject(pOldFont);
+   CFont* pOldFont = dc.SelectObject(&fontDraw);
+   dc.DrawText(strText, lprcBounds, DT_CENTER | DT_WORDBREAK);
+   dc.SelectObject(pOldFont);
 }
 
 // Support for Search Handlers
 void CABOilPressTestDoc::InitializeSearchContent()
 {
-	CString strSearchContent;
-	// Set search contents from document's data.
-	// The content parts should be separated by ";"
+   CString strSearchContent;
+   // Set search contents from document's data.
+   // The content parts should be separated by ";"
 
-	// For example:  strSearchContent = _T("point;rectangle;circle;ole object;");
-	SetSearchContent(strSearchContent);
+   // For example:  strSearchContent = _T("point;rectangle;circle;ole object;");
+   SetSearchContent(strSearchContent);
 }
 
 void CABOilPressTestDoc::SetSearchContent(const CString& value)
 {
-	if (value.IsEmpty())
-	{
-		RemoveChunk(PKEY_Search_Contents.fmtid, PKEY_Search_Contents.pid);
-	}
-	else
-	{
-		CMFCFilterChunkValueImpl *pChunk = nullptr;
-		ATLTRY(pChunk = new CMFCFilterChunkValueImpl);
-		if (pChunk != nullptr)
-		{
-			pChunk->SetTextValue(PKEY_Search_Contents, value, CHUNK_TEXT);
-			SetChunkValue(pChunk);
-		}
-	}
+   if (value.IsEmpty())
+   {
+      RemoveChunk(PKEY_Search_Contents.fmtid, PKEY_Search_Contents.pid);
+   }
+   else
+   {
+      CMFCFilterChunkValueImpl *pChunk = nullptr;
+      ATLTRY(pChunk = new CMFCFilterChunkValueImpl);
+      if (pChunk != nullptr)
+      {
+         pChunk->SetTextValue(PKEY_Search_Contents, value, CHUNK_TEXT);
+         SetChunkValue(pChunk);
+      }
+   }
 }
 
 #endif // SHARED_HANDLERS
@@ -148,12 +195,12 @@ void CABOilPressTestDoc::SetSearchContent(const CString& value)
 #ifdef _DEBUG
 void CABOilPressTestDoc::AssertValid() const
 {
-	CDocument::AssertValid();
+   CDocument::AssertValid();
 }
 
 void CABOilPressTestDoc::Dump(CDumpContext& dc) const
 {
-	CDocument::Dump(dc);
+   CDocument::Dump(dc);
 }
 #endif //_DEBUG
 
@@ -161,24 +208,31 @@ void CABOilPressTestDoc::Dump(CDumpContext& dc) const
 // CABOilPressTestDoc commands
 void CABOilPressTestDoc::OnWellListOpen()
 {
-	CFileDialog dlg{ TRUE };
-	dlg.m_ofn.Flags |= OFN_FILEMUSTEXIST;
-	dlg.m_ofn.lpstrFilter = _T( "Bemühen Well List Files (*.bwl)\0*.bwl\0All Files (*.*)\0*.*\0\0" ); // filter
+   CFileDialog dlg{ TRUE };
+   dlg.m_ofn.Flags |= OFN_FILEMUSTEXIST;
+   dlg.m_ofn.lpstrFilter = _T( "Bemühen Well List Files (*.bwl)\0*.bwl\0All Files (*.*)\0*.*\0\0" ); // filter
 
-	if( dlg.DoModal() == IDCANCEL )
-	{
-		return;
-	}
+   if( dlg.DoModal() == IDCANCEL )
+   {
+      return;
+   }
 
-	CStringA path{ dlg.GetPathName() };
+   CStringA path{ dlg.GetPathName() };
 
-	m_uwiList->clear();
-	m_uwiList->load( static_cast<const char*>(path) );
+   uwis_->clear();
+   size_t count{ uwis_->load( static_cast<const char*>(path) ) };
 
-	notify_well_list_changed( { *m_uwiList } );
+   if( count == 0 )
+   {
+      string test{ "The file '" + path + "' does not contain any Unique Well Identifiers." };
+      ::MessageBoxA( ::AfxGetMainWnd()->GetSafeHwnd(), test.c_str(), "No Wells Loaded", MB_ICONEXCLAMATION | MB_OK );
+      return;
+   }
+
+   notify_well_list_changed( { *uwis_ } );
 }
 
 void CABOilPressTestDoc::OnUpdateWellListOpen( CCmdUI* pCmdUI )
 {
-	pCmdUI->Enable( TRUE );
+   pCmdUI->Enable( TRUE );
 }

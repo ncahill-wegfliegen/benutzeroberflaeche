@@ -65,6 +65,7 @@
 #define IDD_DIALOG_DUMMY                310
 #define IDC_LIST1                       1000
 #define IDC_LIST_SOMETHING              1000
+#define IDC_LIST2                       1001
 #define ID_WRITE_PASTEASHYPERLINK       32770
 #define ID_VIEW_WELL_LIST_PANE          32771
 #define ID_VIEW_PROPERTIES              32772
@@ -76,9 +77,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        312
+#define _APS_NEXT_RESOURCE_VALUE        314
 #define _APS_NEXT_COMMAND_VALUE         32774
-#define _APS_NEXT_CONTROL_VALUE         1001
+#define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

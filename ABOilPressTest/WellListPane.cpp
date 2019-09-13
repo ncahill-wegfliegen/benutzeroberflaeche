@@ -28,41 +28,41 @@ CWellListBox::~CWellListBox()
 
 bool CWellListBox::Load( const nhill::uwi::List& uwi_list )
 {
-	CListBox::ResetContent();
+   CListBox::ResetContent();
 
-	for( const auto& uwi : uwi_list )
-	{
-		string s;
-		switch( uwi.survey_system() )
-		{
-		case nhill::Survey_system::dls:
-		{
-			nhill::uwi::Dls dls{ nhill::uwi::dls::parse_sort( uwi.value() ) };
-			s = dls.full_dressed();
-			break;
-		}
-		}
-		wstring w{ s.cbegin(), s.cend() };
-		int index{ CListBox::AddString( w.c_str() ) };
-		CListBox::SetItemDataPtr( index, (void*)(&uwi)); // points to a UWI in the Document's UWI list.
-	}
+   for( const auto& uwi : uwi_list )
+   {
+      string s;
+      switch( uwi.survey_system() )
+      {
+      case nhill::Survey_system::dls:
+      {
+         nhill::uwi::Dls dls{ nhill::uwi::dls::parse_sort( uwi.value() ) };
+         s = dls.full_dressed();
+         break;
+      }
+      }
+      wstring w{ s.cbegin(), s.cend() };
+      int index{ CListBox::AddString( w.c_str() ) };
+      CListBox::SetItemDataPtr( index, (void*)(&uwi)); // points to a UWI in the Document's UWI list.
+   }
 
-	bool ret{ 0 < CListBox::GetCount() }; // return value
-	if( ret )
-	{
-		CListBox::SetCurSel( 0 );
-		// Notify the Well List Pane that a new UWI has been selected in the List Box
-		::SendMessageA( GetParent()->GetSafeHwnd(), WM_COMMAND, MAKEWPARAM( CListBox::GetDlgCtrlID(), LBN_SELCHANGE ), (LPARAM)m_hWnd );
-	}
+   bool ret{ 0 < CListBox::GetCount() }; // return value
+   if( ret )
+   {
+      CListBox::SetCurSel( 0 );
+      // Notify the Well List Pane that a new UWI has been selected in the List Box
+      ::SendMessageA( GetParent()->GetSafeHwnd(), WM_COMMAND, MAKEWPARAM( CListBox::GetDlgCtrlID(), LBN_SELCHANGE ), (LPARAM)m_hWnd );
+   }
 
-	return ret;
+   return ret;
 }
 
 const nhill::Uwi& CWellListBox::GetCurUwi() const
 {
-	int curSel{ CListBox::GetCurSel() };
-	void* uwi{ CListBox::GetItemDataPtr( curSel ) };
-	return *(const nhill::Uwi*)uwi;
+   int curSel{ CListBox::GetCurSel() };
+   void* uwi{ CListBox::GetItemDataPtr( curSel ) };
+   return *(const nhill::Uwi*)uwi;
 }
 
 BEGIN_MESSAGE_MAP( CWellListBox, CListBox )
@@ -80,13 +80,18 @@ CWellListPane::~CWellListPane()
 
 void CWellListPane::on_well_list_changed( const nhill::Well_list_changed_event_args& event_args )
 {
-	m_wellListBox.Load( event_args.uwi_list );
+   m_wellListBox.Load( event_args.uwi_list );
+}
+
+void CWellListPane::on_test_changed( const nhill::Test_changed_event_args&  )
+{
+   // Ignore this norification
 }
 
 BEGIN_MESSAGE_MAP( CWellListPane, CDockablePane )
    ON_WM_CREATE()
    ON_WM_SIZE()
-	ON_LBN_SELCHANGE( m_idWellListBox, &CWellListPane::OnWellListBoxSelectionChanged )
+   ON_LBN_SELCHANGE( m_idWellListBox, &CWellListPane::OnWellListBoxSelectionChanged )
 END_MESSAGE_MAP()
 
 int CWellListPane::OnCreate( LPCREATESTRUCT lpCreateStruct )
@@ -152,7 +157,7 @@ void CWellListPane::UpdateFonts()
 
 void CWellListPane::OnWellListBoxSelectionChanged()
 {
-	const nhill::Uwi& uwi{ m_wellListBox.GetCurUwi() };
-	notify_well_changed( uwi );
+   const nhill::Uwi& uwi{ m_wellListBox.GetCurUwi() };
+   notify_well_changed( &uwi );
 }
 

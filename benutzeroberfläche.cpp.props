@@ -6,8 +6,8 @@
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>bin\$(Platform)\$(Configuration)\</IntDir>
     <IncludePath>$(SolutionDir)..\..\GSL-master\include;C:\boost_1_71_0;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)bin\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
-    <ExecutablePath>$(SolutionDir)..\..\dev\gemeinsam\bin\$(Platform)\$(Configuration);$(SolutionDir)..\..\dev\datenzugriff\bin\$(Platform)\$(Configuration);$(ExecutablePath)</ExecutablePath>
+    <LibraryPath>$(SolutionDir)..\dev\gemeinsam\bin\$(Platform)\$(Configuration)\;$(SolutionDir)..\dev\datenzugriff\bin\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>$(SolutionDir)..\dev\gemeinsam\bin\$(Platform)\$(Configuration);$(SolutionDir)..\dev\datenzugriff\bin\$(Platform)\$(Configuration);$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>

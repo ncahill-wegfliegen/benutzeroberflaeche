@@ -25,6 +25,9 @@
     <Filter Include="additional\event args">
       <UniqueIdentifier>{0c4a4002-064b-471e-8f6c-1b4f46bf9f17}</UniqueIdentifier>
     </Filter>
+    <Filter Include="additional\ticket">
+      <UniqueIdentifier>{e408da26-0b16-46d6-bfe0-26aac09c9393}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ABOilPressTest.h">
@@ -84,6 +87,12 @@
     <ClInclude Include="well_observer.h">
       <Filter>additional\well list</Filter>
     </ClInclude>
+    <ClInclude Include="test_changed_event_args.h">
+      <Filter>additional\event args</Filter>
+    </ClInclude>
+    <ClInclude Include="TicketSection00.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ABOilPressTest.cpp">
@@ -133,6 +142,12 @@
     </ClCompile>
     <ClCompile Include="well_observer.cpp">
       <Filter>additional\well list</Filter>
+    </ClCompile>
+    <ClCompile Include="test_changed_event_args.cpp">
+      <Filter>additional\event args</Filter>
+    </ClCompile>
+    <ClCompile Include="TicketSection00.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

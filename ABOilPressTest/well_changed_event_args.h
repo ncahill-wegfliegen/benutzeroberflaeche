@@ -11,11 +11,11 @@ namespace nhill
 class Well_changed_event_args : public Event_args
 {
 public:
-	Well_changed_event_args( const Uwi& uwi );
+	Well_changed_event_args( const Uwi* uwi );
 	~Well_changed_event_args();
 
-	/// <summary>The currently selected UWI. A reference to a UWI in the Document's UWI list.</summary>
-	const Uwi& uwi;
+	/// <summary>The currently selected UWI. A pointer to a UWI in the Document's UWI list.</summary>
+	const Uwi* uwi;
 };
 
 }

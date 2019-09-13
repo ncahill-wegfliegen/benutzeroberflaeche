@@ -1,6 +1,7 @@
 #pragma once
 
 #include "well_list_changed_event_args.h"
+#include "test_changed_event_args.h"
 #include <vector>
 #include <functional>
 
@@ -15,6 +16,7 @@ public:
 	void detach( Doc_observer& observer );
 
 	void notify_well_list_changed( const Well_list_changed_event_args& event_args );
+   void notify_test_changed( const Test_changed_event_args& event_args );
 
 private:
 	std::vector<Doc_observer*> observers_;

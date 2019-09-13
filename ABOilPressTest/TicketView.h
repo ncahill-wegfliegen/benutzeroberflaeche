@@ -14,49 +14,56 @@
 
 #pragma once
 
+#include "doc_observer.h"
 
-class CTicketView : public CView
+class TicketSection;
+namespace nhill
 {
-protected: // create from serialization only
-	CTicketView() noexcept;
-	DECLARE_DYNCREATE(CTicketView)
+namespace ctrl
+{
+class UserControlPanel;
+}
+}
 
-// Attributes
-public:
-	CABOilPressTestDoc* GetDocument() const;
-
-// Operations
+class CTicketView : public CView, public nhill::Doc_observer
+{
 public:
 
-// Overrides
-public:
-	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-protected:
-	virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
-	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
-	virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
-
-// Implementation
-public:
-	virtual ~CTicketView();
+   virtual ~CTicketView();
 #ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
+   virtual void AssertValid() const;
+   virtual void Dump( CDumpContext& dc ) const;
 #endif
 
-protected:
+   CABOilPressTestDoc* GetDocument() const;
 
-// Generated message map functions
 protected:
-	afx_msg void OnFilePrintPreview();
-	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
-	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-	DECLARE_MESSAGE_MAP()
+   CTicketView() noexcept;
+   DECLARE_DYNCREATE( CTicketView )
+
+   std::unique_ptr<TicketSection> section_well_id_;
+   std::unique_ptr<nhill::ctrl::UserControlPanel> section_well_id_panel_;
+   const UINT section_well_id_id_{ 1 };
+
+   void on_well_list_changed( const nhill::Well_list_changed_event_args& event_args ) final;
+   void on_test_changed( const nhill::Test_changed_event_args& event_args ) final;
+
+   virtual void OnDraw( CDC* pDC );  // overridden to draw this view
+   virtual BOOL PreCreateWindow( CREATESTRUCT& cs );
+   virtual BOOL OnPreparePrinting( CPrintInfo* pInfo );
+   virtual void OnBeginPrinting( CDC* pDC, CPrintInfo* pInfo );
+   virtual void OnEndPrinting( CDC* pDC, CPrintInfo* pInfo );
+
+   afx_msg int OnCreate( LPCREATESTRUCT lpCreateStruct );
+   afx_msg void OnFilePrintPreview();
+   afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
+   afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+   DECLARE_MESSAGE_MAP()
+public:
 };
 
 #ifndef _DEBUG  // debug version in ABOilPressTestView.cpp
-inline CABOilPressTestDoc* CABOilPressTestView::GetDocument() const
+inline CABOilPressTestDoc* CTicketView::GetDocument() const
    { return reinterpret_cast<CABOilPressTestDoc*>(m_pDocument); }
 #endif
 
