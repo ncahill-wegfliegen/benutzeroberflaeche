@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="control">
+      <UniqueIdentifier>{990e7a3c-db40-406c-8d47-933b17d6744c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="control\combo">
+      <UniqueIdentifier>{65ad091b-1aad-4d0e-af33-f291919f9a9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="control\user">
+      <UniqueIdentifier>{11258f3a-aa9d-4286-ae29-eea5088c8bc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="control\button">
+      <UniqueIdentifier>{64aac0ca-c54d-419c-8b15-dbbbe8ebe7db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module">
+      <UniqueIdentifier>{412c147e-9523-4a0b-943c-0da5c1cbd605}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="xml">
+      <UniqueIdentifier>{d64ffef2-7aa2-40f7-a951-65f7340b5b3a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>module</Filter>
+    </ClCompile>
+    <ClCompile Include="button.cpp">
+      <Filter>control\button</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>module</Filter>
+    </ClCompile>
+    <ClCompile Include="xml_logfont.cpp">
+      <Filter>xml</Filter>
+    </ClCompile>
+    <ClCompile Include="user_control.cpp">
+      <Filter>control\user</Filter>
+    </ClCompile>
+    <ClCompile Include="user_control_panel.cpp">
+      <Filter>control\user</Filter>
+    </ClCompile>
+    <ClCompile Include="cell.cpp" />
+    <ClCompile Include="xml_cell.cpp">
+      <Filter>xml</Filter>
+    </ClCompile>
+    <ClCompile Include="block.cpp" />
+    <ClCompile Include="grid_pos.cpp" />
+    <ClCompile Include="xml_grid_pos.cpp">
+      <Filter>xml</Filter>
+    </ClCompile>
+    <ClCompile Include="cell_helper.cpp" />
+    <ClCompile Include="block_helper.cpp" />
+    <ClCompile Include="halign_ex.cpp" />
+    <ClCompile Include="valign.cpp" />
+    <ClCompile Include="xml_block.cpp">
+      <Filter>xml</Filter>
+    </ClCompile>
+    <ClCompile Include="grid.cpp" />
+    <ClCompile Include="grid_helper.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\user_control.rc2">
+      <Filter>module\Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="targetver.h">
+      <Filter>module</Filter>
+    </ClInclude>
+    <ClInclude Include="port.h">
+      <Filter>module</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>module</Filter>
+    </ClInclude>
+    <ClInclude Include="combo.h">
+      <Filter>control\combo</Filter>
+    </ClInclude>
+    <ClInclude Include="combo_box.h">
+      <Filter>control\combo</Filter>
+    </ClInclude>
+    <ClInclude Include="combo_gallery.h">
+      <Filter>control\combo</Filter>
+    </ClInclude>
+    <ClInclude Include="combo_item.h">
+      <Filter>control\combo</Filter>
+    </ClInclude>
+    <ClInclude Include="combo_item_container.h">
+      <Filter>control\combo</Filter>
+    </ClInclude>
+    <ClInclude Include="button.h">
+      <Filter>control\button</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>module</Filter>
+    </ClInclude>
+    <ClInclude Include="xml_logfont.h">
+      <Filter>xml</Filter>
+    </ClInclude>
+    <ClInclude Include="user_control.h">
+      <Filter>control\user</Filter>
+    </ClInclude>
+    <ClInclude Include="user_control_panel.h">
+      <Filter>control\user</Filter>
+    </ClInclude>
+    <ClInclude Include="dllmain.h">
+      <Filter>module</Filter>
+    </ClInclude>
+    <ClInclude Include="cell.h" />
+    <ClInclude Include="xml_cell.h">
+      <Filter>xml</Filter>
+    </ClInclude>
+    <ClInclude Include="block.h" />
+    <ClInclude Include="grid_pos.h" />
+    <ClInclude Include="xml_grid_pos.h">
+      <Filter>xml</Filter>
+    </ClInclude>
+    <ClInclude Include="halign.h" />
+    <ClInclude Include="valign.h" />
+    <ClInclude Include="cell_helper.h" />
+    <ClInclude Include="block_helper.h" />
+    <ClInclude Include="halign_ex.h" />
+    <ClInclude Include="valign_ex.h" />
+    <ClInclude Include="xml_block.h">
+      <Filter>xml</Filter>
+    </ClInclude>
+    <ClInclude Include="grid.h" />
+    <ClInclude Include="grid_pos_def.h" />
+    <ClInclude Include="grid_helper.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="user_control.rc">
+      <Filter>module\Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

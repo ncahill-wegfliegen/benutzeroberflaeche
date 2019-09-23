@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="module">
+      <UniqueIdentifier>{fa186951-179c-4eaa-b4ae-984fdb60bf5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>module</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>module</Filter>
+    </ClCompile>
+    <ClCompile Include="config.cpp" />
+    <ClCompile Include="ticket_property.cpp" />
+    <ClCompile Include="ticket_section.cpp" />
+    <ClCompile Include="ticket_section_listctrl.cpp" />
+    <ClCompile Include="ticket_section00_listctrl.cpp" />
+    <ClCompile Include="xml_config.cpp" />
+    <ClCompile Include="xml_ticket_property.cpp" />
+    <ClCompile Include="xml_ticket_property00.cpp" />
+    <ClCompile Include="ticket00.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\ab_oil_pressure_test_ui.rc2">
+      <Filter>module\Resource Files</Filter>
+    </None>
+    <None Include="ab_oil_pressure_test_ui.def">
+      <Filter>module</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>module</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>module</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>module</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>module</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h" />
+    <ClInclude Include="port.h" />
+    <ClInclude Include="ticket_property.h" />
+    <ClInclude Include="ticket_section.h" />
+    <ClInclude Include="ticket_section_listctrl.h" />
+    <ClInclude Include="ticket_section00_listctrl.h" />
+    <ClInclude Include="xml_config.h" />
+    <ClInclude Include="xml_ticket_property.h" />
+    <ClInclude Include="xml_ticket_property00.h" />
+    <ClInclude Include="ticket00.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ab_oil_pressure_test_ui.rc">
+      <Filter>module\Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
