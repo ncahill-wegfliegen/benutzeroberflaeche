@@ -14,10 +14,10 @@ namespace xml
 {
 
 template<> NHILL_ABOPT_UI_PORT_FUNCTION
-tinyxml2::XMLElement* make_element( tinyxml2::XMLDocument& doc, const nhill::ctrl::ab_oil_pressure_test_ui::Ticket_property00& ticket_property00, std::string element_name );
+tinyxml2::XMLElement* make_element( tinyxml2::XMLDocument& doc, const nhill::ctrl::ab_oil_pressure_test_ui::Ticket00& ticket00, std::string element_name );
 
 template<> NHILL_ABOPT_UI_PORT_FUNCTION
-tinyxml2::XMLError from_handle( nhill::ctrl::ab_oil_pressure_test_ui::Ticket_property00& ticket_property00, tinyxml2::XMLHandle handle );
+tinyxml2::XMLError from_handle( nhill::ctrl::ab_oil_pressure_test_ui::Ticket00& ticket00, tinyxml2::XMLHandle handle );
 
 }
 }

@@ -254,6 +254,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="block.cpp" />
+    <ClCompile Include="block_container.cpp" />
     <ClCompile Include="block_helper.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="cell_helper.cpp" />
@@ -291,10 +292,12 @@
     <ClCompile Include="xml_logfont.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="cpp.hint" />
     <None Include="res\user_control.rc2" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="block.h" />
+    <ClInclude Include="block_container.h" />
     <ClInclude Include="block_helper.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="cell_helper.h" />

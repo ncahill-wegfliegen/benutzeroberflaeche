@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "config.h"
-#include "ticket_property.h"
+#include "ticket.h"
 #include "xml_config.h"
 #include <shlobj_core.h >
 
@@ -17,9 +17,9 @@ auto nhill::ctrl::ab_oil_pressure_test_ui::Configuration::instance()->Configurat
 }
 
 nhill::ctrl::ab_oil_pressure_test_ui::Configuration::Configuration()
-	: ticket_property_{ make_unique<Ticket_property>()}
+	: ticket_{ make_unique<Ticket>()}
 {
-	clear();
+	clear(*this);
 
 	PWSTR wpath_ptr{ nullptr };
 	::SHGetKnownFolderPath( FOLDERID_LocalAppData, KF_FLAG_DEFAULT_PATH, NULL, &wpath_ptr );
@@ -76,12 +76,12 @@ auto nhill::ctrl::ab_oil_pressure_test_ui::Configuration::path() const->const fs
 	return path_;
 }
 
-auto nhill::ctrl::ab_oil_pressure_test_ui::Configuration::ticket_property() const->Ticket_property &
+auto nhill::ctrl::ab_oil_pressure_test_ui::Configuration::ticket() const->Ticket &
 {
-	return *ticket_property_;
+	return *ticket_;
 }
 
-void nhill::ctrl::ab_oil_pressure_test_ui::Configuration::clear()
+void nhill::ctrl::ab_oil_pressure_test_ui::clear( Configuration& config )
 {
-	ticket_property_->clear();
+	config.ticket().clear();
 }

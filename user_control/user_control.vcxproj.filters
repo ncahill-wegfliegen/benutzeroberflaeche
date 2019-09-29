@@ -61,11 +61,13 @@
     </ClCompile>
     <ClCompile Include="grid.cpp" />
     <ClCompile Include="grid_helper.cpp" />
+    <ClCompile Include="block_container.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\user_control.rc2">
       <Filter>module\Resource Files</Filter>
     </None>
+    <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -131,6 +133,7 @@
     <ClInclude Include="grid.h" />
     <ClInclude Include="grid_pos_def.h" />
     <ClInclude Include="grid_helper.h" />
+    <ClInclude Include="block_container.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="user_control.rc">

@@ -12,7 +12,7 @@ namespace nhill
 namespace ctrl
 {
 
-class Cell
+class NHILL_USERCTRL_PORT_CLASS Cell
 {
 public:
 	Pos row{ 0 };
@@ -26,6 +26,19 @@ public:
 	LOGFONT logfont{};
 	
 	std::string text{};
+
+	Grid_pos pos() const;
+	void pos(const Grid_pos& pos );
+
+	long width() const;
+	long height() const;
+
+	void clear();
+	void clear_label(Pos_size row = 0, Pos_size col = 0, const char* const text = nullptr );
+	void clear_value(Pos_size row = 0, Pos_size col = 0 );
+	void clear_uom(Pos_size row = 0, Pos_size col = 0, const char* const text = nullptr );
+
+	void swap( Cell& other ) noexcept;
 };
 
 }
@@ -37,13 +50,7 @@ namespace nhill
 namespace ctrl
 {
 
-NHILL_USERCTRL_PORT_FUNCTION Grid_pos pos( const Cell& c );
-NHILL_USERCTRL_PORT_FUNCTION void pos( Cell& c, const Grid_pos& pos );
 
-NHILL_USERCTRL_PORT_FUNCTION long width( const Cell& c );
-NHILL_USERCTRL_PORT_FUNCTION long height( const Cell& c );
-
-NHILL_USERCTRL_PORT_FUNCTION void clear( Cell& c );
 NHILL_USERCTRL_PORT_FUNCTION void swap( Cell& a, Cell& b ) noexcept;
 
 }

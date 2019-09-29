@@ -28,7 +28,6 @@ END_MESSAGE_MAP()
 }
 
 nhill::ctrl::ab_oil_pressure_test_ui::TicketSection::TicketSection( Record_type record_type, CWnd* pParent /*=nullptr*/)
-	: list_ctrl_{TicketSectionListCtrl::create(record_type)}
 {
 }
 
@@ -53,16 +52,6 @@ bool nhill::ctrl::ab_oil_pressure_test_ui::TicketSection::create()
 	title_font_.CreateFontIndirect( &logfont );
 	title_ctrl_.SetFont( &title_font_ );
 	
-
-	font = list_ctrl_->GetFont();
-	font->GetLogFont( &logfont );
-	hdc = list_ctrl_->GetDC()->GetSafeHdc();
-	logfont.lfHeight = -MulDiv( 10, GetDeviceCaps( hdc, LOGPIXELSY ), 72 );
-	list_ctrl_font_.CreateFontIndirect( &logfont );
-	list_ctrl_->SetFont( &list_ctrl_font_ );
-
-	list_ctrl_->create();
-
 	return true;
 
 }
@@ -90,16 +79,11 @@ void nhill::ctrl::ab_oil_pressure_test_ui::TicketSection::title( std::string_vie
 	}
 }
 
-auto nhill::ctrl::ab_oil_pressure_test_ui::TicketSection::list_control()->TicketSectionListCtrl &
-{
-	return *list_ctrl_;
-}
 
 void nhill::ctrl::ab_oil_pressure_test_ui::TicketSection::DoDataExchange(CDataExchange* dx)
 {
 	base::DoDataExchange( dx );
 	DDX_Control( dx, IDC_ABOPT_UI_TICKET_SECTION_TITLE, title_ctrl_ );
-	DDX_Control( dx, IDC_ABOPT_UI_TICKET_SECTION_LIST, *list_ctrl_ );
 }
 
 int nhill::ctrl::ab_oil_pressure_test_ui::TicketSection::OnCreate( LPCREATESTRUCT lpCreateStruct )

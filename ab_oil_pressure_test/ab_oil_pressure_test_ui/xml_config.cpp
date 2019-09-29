@@ -1,5 +1,5 @@
 #include "xml_config.h"
-#include "xml_ticket_property.h"
+#include "xml_ticket.h"
 
 using namespace std;
 using namespace nhill::ctrl::ab_oil_pressure_test_ui;
@@ -17,7 +17,7 @@ tinyxml2::XMLElement* nhill::xml::make_element( tinyxml2::XMLDocument& doc, cons
 
 	XMLElement* child = nullptr;
 
-	child = make_element( doc, config.ticket_property(), "ticket_property" );
+	child = make_element( doc, config.ticket(), "ticket" );
 	element->LinkEndChild( child );
 
 	return element;
@@ -31,10 +31,10 @@ tinyxml2::XMLError nhill::xml::from_handle( Configuration& config, tinyxml2::XML
 	XMLError retrn = XMLError::XML_NO_ERROR;
 	XMLError error = XMLError::XML_NO_ERROR;
 
-	Ticket_property ticket_property;
-	error = from_parent_handle( ticket_property, handle, "ticket_property" );
+	Ticket ticket;
+	error = from_parent_handle( ticket, handle, "ticket" );
 	if( error == XMLError::XML_NO_ERROR )
-		config.ticket_property() = ticket_property;
+		config.ticket() = ticket;
 	else
 		retrn = error;
 

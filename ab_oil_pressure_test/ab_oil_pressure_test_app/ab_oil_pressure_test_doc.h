@@ -33,7 +33,7 @@ namespace ctrl
 {
 namespace ab_oil_pressure_test_ui
 {
-class Ticket_property;
+class Ticket;
 }
 }
 
@@ -57,7 +57,7 @@ public:
 
 	virtual ~CABOilPressTestDoc();
 
-	const nhill::ctrl::ab_oil_pressure_test_ui::Ticket_property& ticket_property() const;
+	nhill::ctrl::ab_oil_pressure_test_ui::Ticket& ticket() const;
 
    virtual BOOL OnNewDocument();
    virtual void Serialize(CArchive& ar);
@@ -89,7 +89,7 @@ protected:
    /// <remarks>Never allocated. Do not delete!</remarks>
    const Test* test_current_;
 
-	std::unique_ptr<nhill::ctrl::ab_oil_pressure_test_ui::Ticket_property> ticket_property_;
+	std::unique_ptr<nhill::ctrl::ab_oil_pressure_test_ui::Ticket> ticket_;
 
    void on_well_changed( const nhill::Well_changed_event_args& event_args ) final;
 

@@ -10,7 +10,7 @@ namespace ctrl
 {
 namespace ab_oil_pressure_test_ui
 {
-class Ticket_property;
+class Ticket;
 
 class NHILL_ABOPT_UI_PORT_CLASS Configuration final
 {
@@ -27,16 +27,28 @@ public:
 
 	const std::filesystem::path& path() const;
 
-	Ticket_property& ticket_property() const;
+	Ticket& ticket() const;
 
 private:
 	Configuration();
 
 	std::filesystem::path path_;
-	std::unique_ptr<Ticket_property> ticket_property_;
-
-	void clear();
+	std::unique_ptr<Ticket> ticket_;
 };
+
+}
+}
+}
+
+
+namespace nhill
+{
+namespace ctrl
+{
+namespace ab_oil_pressure_test_ui
+{
+
+NHILL_ABOPT_UI_PORT_FUNCTION void clear( Configuration& config );
 
 }
 }

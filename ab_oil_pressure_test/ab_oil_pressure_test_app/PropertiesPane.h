@@ -25,7 +25,7 @@ public:
 class CPropertiesPane : public CDockablePane
 {
 public:
-	enum class Property{ ticket_property = -1, ticket_property00, ticket_property01, ticket_property02, ticket_property03, ticket_property04, ticket_property05 };
+	enum class Property{ ticket = -1, ticket00, ticket_property01, ticket_property02, ticket_property03, ticket_property04, ticket_property05 };
 
 	CPropertiesPane() noexcept;
 	virtual ~CPropertiesPane();

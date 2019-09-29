@@ -1,7 +1,6 @@
 #pragma once
 
 #include "port.h"
-#include "ticket_section_listctrl.h"
 #include "../../user_control/user_control.h"
 #include "../../../datenzugriff/ab_oil_pressure_test/ab_oil_pressure_test/record_type.h"
 #include "resource.h"
@@ -37,14 +36,12 @@ public:
 	std::string title() const;
 	void title( std::string_view );
 
-	TicketSectionListCtrl& list_control();
 
 protected:
 	mutable std::string title_;
 	CStatic title_ctrl_;
 	CFont title_font_;
 
-	std::unique_ptr<TicketSectionListCtrl> list_ctrl_;
 	CFont list_ctrl_font_;
 
 	virtual bool create() override;

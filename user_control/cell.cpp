@@ -3,38 +3,125 @@
 
 using namespace std;
 
-auto nhill::ctrl::pos( const Cell& c )->Grid_pos
+namespace
 {
-	return { c.row, c.col };
+
+COLORREF gray{ RGB( 125, 125, 125 ) };
+COLORREF black{ RGB( 0,0,0 ) };
+COLORREF white{ RGB( 255, 255, 255 ) };
+
+// Reset all cell properties to default
+LOGFONT default_logfont()
+{
+	static LOGFONT lf{};
+	if( lf.lfHeight == 0 )
+	{
+		lf.lfHeight = -14;
+		wcscpy_s( lf.lfFaceName, L"Arial" );
+	}
+	return lf;
 }
 
-void nhill::ctrl::pos( Cell& c, const Grid_pos& pos )
-{
-	c.row = pos.row;
-	c.col = pos.col;
 }
 
-long nhill::ctrl::width( const Cell& c )
+auto nhill::ctrl::Cell::pos() const ->Grid_pos
 {
-	return std::abs( c.rect.right - c.rect.left );
+	return { row, col };
 }
 
-long nhill::ctrl::height( const Cell& c )
+void nhill::ctrl::Cell::pos(const Grid_pos& pos )
 {
-	return std::abs( c.rect.bottom - c.rect.top );
+	row = pos.row;
+	col = pos.col;
 }
 
-void nhill::ctrl::clear( Cell& c )
+long nhill::ctrl::Cell::width() const
 {
-	c.row = 0;
-	c.col = 0;
-	c.halign = HAlign::left;
-	c.valign = VAlign::bottom;
-	c.rect = {};
-	c.text_color = RGB( 0, 0, 0 );
-	c.background_color = RGB( 255, 255, 255 );
-	c.logfont = {};
-	c.text.clear();
+	return std::abs( rect.right - rect.left );
+}
+
+long nhill::ctrl::Cell::height() const
+{
+	return std::abs( rect.bottom - rect.top );
+}
+
+void nhill::ctrl::Cell::clear()
+{
+	row = 0;
+	col = 0;
+	halign = HAlign::left;
+	valign = VAlign::bottom;
+	rect = {};
+	text_color = black;
+	background_color = white;
+	logfont = default_logfont();
+	text.clear();
+}
+
+void nhill::ctrl::Cell::clear_label( Pos_size r, Pos_size c, const char* const txt )
+{
+	row = r;
+	col = c;
+	halign = HAlign::right;
+	valign = VAlign::bottom;
+	rect = {};
+	text_color = gray;
+	background_color = white;
+	logfont = default_logfont();
+	if( txt == nullptr )
+	{
+		text.clear();
+	}
+	else
+	{
+		text = txt;
+	}
+}
+
+void nhill::ctrl::Cell::clear_value( Pos_size r, Pos_size c )
+{
+	row = r;
+	col = c;
+	halign = HAlign::left;
+	valign = VAlign::bottom;
+	rect = {};
+	text_color = black;
+	background_color = white;
+	logfont = default_logfont();
+	text.clear();
+}
+
+void nhill::ctrl::Cell::clear_uom( Pos_size r, Pos_size c, const char* const txt )
+{
+	row = r;
+	col = c;
+	halign = HAlign::left;
+	valign = VAlign::bottom;
+	rect = {};
+	text_color = black;
+	background_color = white;
+	logfont = default_logfont();
+	if( txt == nullptr )
+	{
+		text.clear();
+	}
+	else
+	{
+		text = txt;
+	}
+}
+
+void nhill::ctrl::Cell::swap( Cell& other ) noexcept
+{
+	std::swap( row, other.row );
+	std::swap( col, other.col );
+	std::swap( halign, other.halign );
+	std::swap( valign, other.valign );
+	std::swap( rect, other.rect );
+	std::swap( text_color, other.text_color );
+	std::swap( background_color, other.background_color );
+	std::swap( logfont, other.logfont );
+	std::swap( text, other.text );
 }
 
 void nhill::ctrl::swap( Cell& a, Cell& b ) noexcept

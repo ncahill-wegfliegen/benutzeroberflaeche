@@ -4,7 +4,7 @@
 
 using namespace std;
 
-CSize nhill::ctrl::get_text_extent( const Cell& cell, CDC& dc )
+CSize nhill::ctrl::get_size( const Cell& cell, CDC& dc )
 {
 	// Set the properties 
 	CFont font;
@@ -31,19 +31,14 @@ CSize nhill::ctrl::get_text_extent( const Cell& cell, CDC& dc )
 	return { rc.Width(), rc.Height() };
 }
 
-void nhill::ctrl::set_text_extent( Cell& cell, CSize extent )
-{
-	cell.rect.left = 0;
-	cell.rect.top = 0;
-	cell.rect.right = extent.cx;
-	cell.rect.bottom = extent.cy;
-}
-
 void nhill::ctrl::auto_size( Cell& cell, CDC& dc )
 {
-	CSize sz{ get_text_extent( cell,dc ) };
-	set_text_extent( cell, sz );
+	CSize sz{ get_size( cell, dc ) };
+
+	// Set the rectangle of the cell
+	cell.rect = {0, 0, sz.cx, sz.cy};
 }
+
 
 void nhill::ctrl::draw( const Cell& cell, CDC& dc )
 {

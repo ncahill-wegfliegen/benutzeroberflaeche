@@ -58,7 +58,7 @@ END_MESSAGE_MAP()
 namespace
 {
 
-CPropertiesPane::Property categories[]{ CPropertiesPane::Property::ticket_property, CPropertiesPane::Property::ticket_property00, CPropertiesPane::Property::ticket_property01, CPropertiesPane::Property::ticket_property02, CPropertiesPane::Property::ticket_property03, CPropertiesPane::Property::ticket_property04, CPropertiesPane::Property::ticket_property05 };
+CPropertiesPane::Property categories[]{ CPropertiesPane::Property::ticket, CPropertiesPane::Property::ticket00, CPropertiesPane::Property::ticket_property01, CPropertiesPane::Property::ticket_property02, CPropertiesPane::Property::ticket_property03, CPropertiesPane::Property::ticket_property04, CPropertiesPane::Property::ticket_property05 };
 }
 
 void CPropertiesPane::AdjustLayout()
@@ -82,8 +82,8 @@ const TCHAR* const CPropertiesPane::to_string( Property category)
 {
 	switch( category )
 	{
-	case Property::ticket_property  : return _T("Ticket Property" );
-	case Property::ticket_property00: return _T("Ticket Property: Well Id" );
+	case Property::ticket  : return _T("Ticket Property" );
+	case Property::ticket00: return _T("Ticket Property: Well Id" );
 	case Property::ticket_property01: return _T("Ticket Property: Licensee" );
 	case Property::ticket_property02: return _T("Ticket Property: Field Pool" );
 	case Property::ticket_property03: return _T("Ticket Property: Well Data" );

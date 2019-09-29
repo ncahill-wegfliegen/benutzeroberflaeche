@@ -24,12 +24,11 @@
 #include "TicketView.h"
 #include "Helper.h"
 #include "../ab_oil_pressure_test_ui/config.h"
-
-#include "../ab_oil_pressure_test_ui/ticket_section.h"
-#include "../ab_oil_pressure_test_ui/ticket_property.h"
+#include "../ab_oil_pressure_test_ui/ticket.h"
 #include "../ab_oil_pressure_test_ui/ticket00.h"
+#include "../ab_oil_pressure_test_ui/ticket01.h"
 #include "../ab_oil_pressure_test_ui/resource.h"
-#include "../../user_control/user_control_panel.h"
+#include "../../user_control/grid_helper.h"
 #include "../../../datenzugriff/ab_oil_pressure_test/ab_oil_pressure_test/test.h"
 #include "../../../gemeinsam/utility/str.h"
 
@@ -57,8 +56,12 @@ BEGIN_MESSAGE_MAP(CTicketView, CView)
 END_MESSAGE_MAP()
 
 CTicketView::CTicketView() noexcept
-   : section_well_id_{make_unique<TicketSection>(Record_type::well_id)}
-   , section_well_id_panel_{ make_unique<nhill::ctrl::User_control_panel>(&(*section_well_id_)) }
+	: grid00_{nullptr}
+	, grid01_{ nullptr }
+	, grid02_{ nullptr }
+	, grid03_{ nullptr }
+	, grid04c_{ nullptr }
+	, grid05c_{ nullptr }
 {
 }
 
@@ -66,7 +69,23 @@ CTicketView::~CTicketView()
 {
 }
 
-// CABOilPressTestView drawing
+#ifdef _DEBUG
+void CTicketView::AssertValid() const
+{
+	CView::AssertValid();
+}
+
+void CTicketView::Dump( CDumpContext& dc ) const
+{
+	CView::Dump( dc );
+}
+
+CABOilPressTestDoc* CTicketView::GetDocument() const // non-debug version is inline
+{
+	ASSERT( m_pDocument->IsKindOf( RUNTIME_CLASS( CABOilPressTestDoc ) ) );
+	return (CABOilPressTestDoc*)m_pDocument;
+}
+#endif //_DEBUG
 
 void CTicketView::on_well_list_changed( const nhill::Well_list_changed_event_args& )
 {
@@ -82,45 +101,30 @@ void CTicketView::on_test_changed( const nhill::Test_changed_event_args& event_a
 		return;
 	}
 
-	const Configuration& config{ Configuration::instance() };
-
 	// Get the properties from the document
-	const Ticket_property& ticket_property{ GetDoc()->ticket_property() };
-	// Get the properties for the 00 (well id) section
-	const Ticket_property00& prop00{ ticket_property.ticket_property00 };
+	Ticket& ticket{ GetDoc()->ticket() };
+	Block_ptr_container block_ptrs;
 
-   // Display the ticket for the new test.
-	TicketSectionListCtrl& list_ctrl{ section_well_id_->list_control() };
-	
-	string str{ test->key.uwi.full_dressed() };
-	wstring wstr{ str.cbegin(), str.cend() };
-	list_ctrl.SetItemText( prop00.uwi_value.row, prop00.uwi_value.col, wstr.c_str() );
+	grid04c_ = make_unique<vector<Grid>>();
+	for( auto&& ticket04 : ticket.ticket04c )
+	{
+		block_ptrs = ticket04.block_ptrs();
+		grid04c_->push_back( to_grid( block_ptrs ) );
+	}
 
-	str = std::to_string( test->key.consol_interval_num );
-	wstr = { str.cbegin(), str.cend() };
-	list_ctrl.SetItemText( prop00.consol_interval_num_value.row, prop00.consol_interval_num_value.col, wstr.c_str() );
+	if( 0 < ticket.ticket05c.size() )
+	{
+		grid05c_ = make_unique<vector<Grid>>();
+		for( auto&& ticket05 : ticket.ticket05c )
+		{
+			block_ptrs = ticket05.block_ptrs();
+			grid05c_->push_back( to_grid( block_ptrs ) );
+		}
+	}
 
-	str = test->rec00.well_name;
-	wstr = { str.cbegin(), str.cend() };
-	list_ctrl.SetItemText( prop00.well_name_value.row, prop00.well_name_value.col, wstr.c_str() );
-
-	str = str::trim_start( to_string( test->rec00.on_production_date, "%e %b %Y" ) );
-	wstr = { str.cbegin(), str.cend() };
-	list_ctrl.SetItemText( prop00.on_production_date_value.row, prop00.on_production_date_value.col, wstr.c_str() );
-
-	list_ctrl.SetColumnWidth( 0, LVSCW_AUTOSIZE );
-	list_ctrl.SetColumnWidth( 1, LVSCW_AUTOSIZE );
-	list_ctrl.SetColumnWidth( 2, LVSCW_AUTOSIZE );
-	list_ctrl.SetColumnWidth( 3, LVSCW_AUTOSIZE );
-
-	CDC* dc{ list_ctrl.GetDC() };
-	dc->SelectObject( ::CreateFontIndirect( &prop00.uwi_label.logfont) );
-
-	str = prop00.uwi_label.text;
-	wstr = { str.cbegin(), str.cend() };
-	//CSize sz{ dc->GetTextExtent( prop00.uwi_label.text().c_str(), prop00.uwi_label.text().size() ) };
-	
-	
+	// Force the view to redraw
+	Invalidate();
+	UpdateWindow();
 }
 
 BOOL CTicketView::PreCreateWindow(CREATESTRUCT& cs)
@@ -131,92 +135,134 @@ BOOL CTicketView::PreCreateWindow(CREATESTRUCT& cs)
    return CView::PreCreateWindow(cs);
 }
 
+void CTicketView::OnInitialUpdate()
+{
+	__super::OnInitialUpdate();
+
+	// Get the properties from the document
+	Ticket& ticket{ GetDoc()->ticket() };
+
+	Block_ptr_container block_ptrs{ ticket.ticket00.block_ptrs() };
+	grid00_ = make_unique<Grid>( to_grid( block_ptrs ) );
+
+	block_ptrs = ticket.ticket01.block_ptrs();
+	grid01_ = make_unique<Grid>( to_grid( block_ptrs ) );
+
+	block_ptrs = ticket.ticket02.block_ptrs();
+	grid02_ = make_unique<Grid>( to_grid( block_ptrs ) );
+
+	block_ptrs = ticket.ticket03.block_ptrs();
+	grid03_ = make_unique<Grid>( to_grid( block_ptrs ) );
+
+	// 4 and 5 are handled in on_test_changed handler
+	grid04c_ = nullptr;
+	grid05c_ = nullptr;
+
+}
+
+
+void CTicketView::OnUpdate( CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/ )
+{
+}
+
+void CTicketView::OnDraw( CDC* dc )
+{
+	CABOilPressTestDoc* doc = GetDocument();
+	ASSERT_VALID( doc );
+	if( !doc )
+		return;
+
+	if( !grid00_ || !grid01_ )
+	{
+		return;
+	}
+
+
+	long top{ 10 };
+	long left{ 10 };
+	long pad_top{ 5 };
+	long pad_left{ 5 };
+
+	auto_size( *grid00_, *dc );
+	normalize_size( *grid00_ );
+	top = layout( *grid00_, top, left, pad_top, pad_left );
+	top += 2*pad_top;
+	draw( *grid00_, *dc );
+
+	auto_size( *grid01_, *dc );
+	normalize_size( *grid01_ );
+	top = layout( *grid01_, top, left, pad_top, pad_left );
+	top += 2 * pad_top;
+	draw( *grid01_, *dc );
+
+	auto_size( *grid02_, *dc );
+	normalize_size( *grid02_ );
+	top = layout( *grid02_, top, left, pad_top, pad_left );
+	top += 2 * pad_top;
+	draw( *grid02_, *dc );
+
+	auto_size( *grid03_, *dc );
+	normalize_size( *grid03_ );
+	top = layout( *grid03_, top, left, pad_top, pad_left );
+	top += 2 * pad_top;
+	draw( *grid03_, *dc );
+
+	if( grid04c_ != nullptr )
+	{
+		for( auto&& grid04 : *grid04c_ )
+		{
+			auto_size( grid04, *dc );
+			normalize_size( grid04 );
+			top = layout( grid04, top, left, pad_top, pad_left );
+			top += 2 * pad_top;
+			draw( grid04, *dc );
+		}
+	}
+
+	//if( grid05c_ != nullptr )
+	//{
+	//	for( auto&& grid05 : *grid05c_ )
+	//	{
+	//		auto_size( grid05, *dc );
+	//		normalize_size( grid05 );
+	//		top = layout( grid05, top, left, pad_top, pad_left );
+	//		top += 2 * pad_top;
+	//		draw( grid05, *dc );
+	//	}
+	//}
+}
+
+
+BOOL CTicketView::OnPreparePrinting( CPrintInfo* pInfo )
+{
+	// default preparation
+	return DoPreparePrinting( pInfo );
+}
+
+void CTicketView::OnBeginPrinting( CDC* /*pDC*/, CPrintInfo* /*pInfo*/ )
+{
+	// TODO: add extra initialization before printing
+}
+
+void CTicketView::OnEndPrinting( CDC* /*pDC*/, CPrintInfo* /*pInfo*/ )
+{
+	// TODO: add cleanup after printing
+}
+
+
 int CTicketView::OnCreate( LPCREATESTRUCT lpCreateStruct )
 {
-   if( __super::OnCreate( lpCreateStruct ) == -1 )
-      return -1;
-
-
-
-	//LOGFONT lf{};
-	//lf.lfHeight = -14;
-	//lf.lfWeight = FW_BOLD;
-	//wcscpy_s( lf.lfFaceName, L"Arial" );
-
-	//font_section_title_.CreateFontIndirect( &lf );
-
-	//ZeroMemory( &lf, sizeof( LOGFONT ) );
-	//lf.lfHeight = -12;
-	//_tcscpy_s( lf.lfFaceName, _T( "Verdana" ) );
-
-   if( !section_well_id_panel_->Create( _T( "" ), WS_VISIBLE | WS_BORDER, CRect{ 10,10, 750, 250 }, this, section_well_id_id_ ) )
-   {
-      return FALSE;
-   }
-	section_well_id_panel_->background_color( RGB( 255, 255, 255 ) );
-	
-	if( !section_well_id_->Create( IDD_ABOPT_UI_TICKET_SECTION, &(*section_well_id_panel_) ) )
-   {
-      return FALSE;
-   }
-   section_well_id_->title( "WELL ID" );
+	if( __super::OnCreate( lpCreateStruct ) == -1 )
+		return -1;
 
 	return 0;
 }
-
-
-void CTicketView::OnDraw(CDC* dc)
-{
-   CABOilPressTestDoc* doc = GetDocument();
-   ASSERT_VALID( doc );
-   if (!doc )
-      return;
-
-
-
-	//CFont* font_old{ dc->SelectObject(&font_section_title_) };
-
-	//int x{ 10 };
-	//int y{ 10 };
-	//dc->TextOut( 10, 10, _T("WELL ID") );
-	//CSize sz{ dc->GetTextExtent( _T( "WELL ID" ) ) };
-
-	//y += sz.cy;
-
-	//dc->SelectObject( &font_label_ );
-	//dc->SetTextColor( RGB( 125, 125, 125 ) );
-	//dc->TextOut( x, y, _T( "UWI" ) );
-
-	//dc->SelectObject( font_old );
-
-   // TODO: add draw code for native data here
-}
-
-
-// CABOilPressTestView printing
-
 
 void CTicketView::OnFilePrintPreview()
 {
 #ifndef SHARED_HANDLERS
    AFXPrintPreview(this);
 #endif
-}
-
-BOOL CTicketView::OnPreparePrinting(CPrintInfo* pInfo)
-{
-   // default preparation
-   return DoPreparePrinting(pInfo);
-}
-
-void CTicketView::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
-{
-   // TODO: add extra initialization before printing
-}
-
-void CTicketView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
-{
-   // TODO: add cleanup after printing
 }
 
 void CTicketView::OnRButtonUp(UINT /* nFlags */, CPoint point)
@@ -235,25 +281,10 @@ void CTicketView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 
 // CABOilPressTestView diagnostics
 
-#ifdef _DEBUG
-void CTicketView::AssertValid() const
-{
-   CView::AssertValid();
-}
-
-void CTicketView::Dump(CDumpContext& dc) const
-{
-   CView::Dump(dc);
-}
-
-CABOilPressTestDoc* CTicketView::GetDocument() const // non-debug version is inline
-{
-   ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CABOilPressTestDoc)));
-   return (CABOilPressTestDoc*)m_pDocument;
-}
-#endif //_DEBUG
 
 
 // CABOilPressTestView message handlers
+
+
 
 

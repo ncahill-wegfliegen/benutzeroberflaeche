@@ -15,18 +15,7 @@
 #pragma once
 
 #include "doc_observer.h"
-
-namespace nhill
-{
-namespace ctrl
-{
-class User_control_panel;
-namespace ab_oil_pressure_test_ui
-{
-class TicketSection;
-}
-}
-}
+#include "../../user_control/grid.h"
 
 class CTicketView : public CView, public nhill::Doc_observer
 {
@@ -37,25 +26,26 @@ public:
    virtual void AssertValid() const;
    virtual void Dump( CDumpContext& dc ) const;
 #endif
-
-   CABOilPressTestDoc* GetDocument() const;
+	   CABOilPressTestDoc* GetDocument() const;
 
 protected:
    CTicketView() noexcept;
    DECLARE_DYNCREATE( CTicketView )
 
-	//CFont font_section_title_;
-	//CFont font_label_;
-
-   std::unique_ptr<nhill::ctrl::ab_oil_pressure_test_ui::TicketSection> section_well_id_;
-   std::unique_ptr<nhill::ctrl::User_control_panel> section_well_id_panel_;
-   const UINT section_well_id_id_{ 1 };
+	std::unique_ptr<nhill::ctrl::Grid> grid00_;
+	std::unique_ptr<nhill::ctrl::Grid> grid01_;
+	std::unique_ptr<nhill::ctrl::Grid> grid02_;
+	std::unique_ptr<nhill::ctrl::Grid> grid03_;
+	std::unique_ptr<std::vector<nhill::ctrl::Grid>> grid04c_;
+	std::unique_ptr<std::vector<nhill::ctrl::Grid>> grid05c_;
 
    void on_well_list_changed( const nhill::Well_list_changed_event_args& event_args ) final;
    void on_test_changed( const nhill::Test_changed_event_args& event_args ) final;
 
-   virtual void OnDraw( CDC* pDC );  // overridden to draw this view
-   virtual BOOL PreCreateWindow( CREATESTRUCT& cs );
+	virtual BOOL PreCreateWindow( CREATESTRUCT& cs );
+	virtual void OnInitialUpdate();
+	virtual void OnUpdate( CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/ );
+	virtual void OnDraw( CDC* pDC );  // overridden to draw this view
    virtual BOOL OnPreparePrinting( CPrintInfo* pInfo );
    virtual void OnBeginPrinting( CDC* pDC, CPrintInfo* pInfo );
    virtual void OnEndPrinting( CDC* pDC, CPrintInfo* pInfo );

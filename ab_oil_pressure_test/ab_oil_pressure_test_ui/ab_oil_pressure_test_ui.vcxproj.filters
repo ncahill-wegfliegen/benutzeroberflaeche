@@ -17,14 +17,18 @@
       <Filter>module</Filter>
     </ClCompile>
     <ClCompile Include="config.cpp" />
-    <ClCompile Include="ticket_property.cpp" />
     <ClCompile Include="ticket_section.cpp" />
-    <ClCompile Include="ticket_section_listctrl.cpp" />
-    <ClCompile Include="ticket_section00_listctrl.cpp" />
     <ClCompile Include="xml_config.cpp" />
-    <ClCompile Include="xml_ticket_property.cpp" />
-    <ClCompile Include="xml_ticket_property00.cpp" />
     <ClCompile Include="ticket00.cpp" />
+    <ClCompile Include="ticket.cpp" />
+    <ClCompile Include="xml_ticket00.cpp" />
+    <ClCompile Include="xml_ticket.cpp" />
+    <ClCompile Include="ticket01.cpp" />
+    <ClCompile Include="xml_ticket01.cpp" />
+    <ClCompile Include="ticket02.cpp" />
+    <ClCompile Include="ticket03.cpp" />
+    <ClCompile Include="ticket04.cpp" />
+    <ClCompile Include="ticket05.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\ab_oil_pressure_test_ui.rc2">
@@ -49,14 +53,18 @@
     </ClInclude>
     <ClInclude Include="config.h" />
     <ClInclude Include="port.h" />
-    <ClInclude Include="ticket_property.h" />
     <ClInclude Include="ticket_section.h" />
-    <ClInclude Include="ticket_section_listctrl.h" />
-    <ClInclude Include="ticket_section00_listctrl.h" />
     <ClInclude Include="xml_config.h" />
-    <ClInclude Include="xml_ticket_property.h" />
-    <ClInclude Include="xml_ticket_property00.h" />
     <ClInclude Include="ticket00.h" />
+    <ClInclude Include="ticket.h" />
+    <ClInclude Include="xml_ticket00.h" />
+    <ClInclude Include="xml_ticket.h" />
+    <ClInclude Include="ticket01.h" />
+    <ClInclude Include="xml_ticket01.h" />
+    <ClInclude Include="ticket02.h" />
+    <ClInclude Include="ticket03.h" />
+    <ClInclude Include="ticket04.h" />
+    <ClInclude Include="ticket05.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ab_oil_pressure_test_ui.rc">

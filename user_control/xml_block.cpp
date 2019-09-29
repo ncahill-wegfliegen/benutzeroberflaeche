@@ -45,14 +45,14 @@ tinyxml2::XMLError nhill::xml::from_handle( Block& block, tinyxml2::XMLHandle ha
 	else
 		retrn = error;
 
-	clear( cell );
+	cell.clear();
 	error = from_parent_handle( cell, handle, "value" );
 	if( error == XMLError::XML_NO_ERROR )
 		block.value = cell;
 	else
 		retrn = error;
 
-	clear( cell );
+	cell.clear();
 	error = from_parent_handle( cell, handle, "uom" );
 	if( error == XMLError::XML_NO_ERROR )
 		block.uom = cell;
